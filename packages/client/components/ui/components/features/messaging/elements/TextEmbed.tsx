@@ -154,7 +154,8 @@ export function TextEmbed(props: { embed: TextEmbedClass | WebsiteEmbed }) {
                 <video
                   controls
                   preload="metadata"
-                  src={(props.embed as WebsiteEmbed).video!.proxiedURL}
+                  src={(props.embed as WebsiteEmbed).video!.proxiedURL || (props.embed as WebsiteEmbed).video!.url}
+                  onError={(e) => { e.currentTarget.src = (props.embed as WebsiteEmbed).video!.url; }}
                 />
               </SizedContent>
             </Match>
@@ -164,7 +165,8 @@ export function TextEmbed(props: { embed: TextEmbedClass | WebsiteEmbed }) {
                 height={(props.embed as WebsiteEmbed).image!.height}
               >
                 <img
-                  src={(props.embed as WebsiteEmbed).image!.proxiedURL}
+                  src={(props.embed as WebsiteEmbed).image!.proxiedURL || (props.embed as WebsiteEmbed).image!.url}
+                  onError={(e) => { e.currentTarget.src = (props.embed as WebsiteEmbed).image!.url; }}
                   loading="lazy"
                   class={css({ cursor: "pointer" })}
                   onClick={() =>
@@ -188,7 +190,8 @@ export function TextEmbed(props: { embed: TextEmbedClass | WebsiteEmbed }) {
         }
       >
         <PreviewImage
-          src={(props.embed as WebsiteEmbed).image!.proxiedURL}
+          src={(props.embed as WebsiteEmbed).image!.proxiedURL || (props.embed as WebsiteEmbed).image!.url}
+          onError={(e) => { e.currentTarget.src = (props.embed as WebsiteEmbed).image!.url; }}
           loading="lazy"
         />
       </Show>

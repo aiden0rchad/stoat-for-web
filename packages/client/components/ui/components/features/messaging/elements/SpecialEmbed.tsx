@@ -57,8 +57,8 @@ export function SpecialEmbed(props: { embed: WebsiteEmbed }) {
         scrolling="no"
         allowfullscreen
         allowtransparency
-        frameborder={0}
-        // style={{ width: getSize()?.width + "px" }}
+        sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"
+        style={{ width: "100%", height: "100%", border: "none", "border-radius": "var(--borderRadius-md)" }}
         src={props.embed.embedURL}
       />
     </SizedContent>

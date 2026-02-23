@@ -28,9 +28,9 @@ export function VoiceCallCardActions(props: { size: "xs" | "sm" }) {
           tooltip: voice.speakingPermission
             ? undefined
             : {
-                placement: "top",
-                content: t`Missing permission`,
-              },
+              placement: "top",
+              content: t`Missing permission`,
+            },
         }}
         isDisabled={!voice.speakingPermission}
       >
@@ -46,9 +46,9 @@ export function VoiceCallCardActions(props: { size: "xs" | "sm" }) {
           tooltip: voice.listenPermission
             ? undefined
             : {
-                placement: "top",
-                content: t`Missing permission`,
-              },
+              placement: "top",
+              content: t`Missing permission`,
+            },
         }}
         isDisabled={!voice.listenPermission}
       >
@@ -61,29 +61,21 @@ export function VoiceCallCardActions(props: { size: "xs" | "sm" }) {
       </IconButton>
       <IconButton
         size={props.size}
-        variant={"tonal"}
-        use:floating={{
-          tooltip: {
-            placement: "top",
-            content: "Coming soon! 👀",
-          },
-        }}
-        isDisabled
+        variant={voice.video() ? "filled" : "tonal"}
+        onPress={() => voice.toggleCamera()}
       >
-        <Symbol>camera_video</Symbol>
+        <Show when={voice.video()} fallback={<Symbol>videocam_off</Symbol>}>
+          <Symbol>videocam</Symbol>
+        </Show>
       </IconButton>
       <IconButton
         size={props.size}
-        variant={"tonal"}
-        use:floating={{
-          tooltip: {
-            placement: "top",
-            content: "Coming soon! 👀",
-          },
-        }}
-        isDisabled
+        variant={voice.screenshare() ? "filled" : "tonal"}
+        onPress={() => voice.toggleScreenshare()}
       >
-        <Symbol>screen_share</Symbol>
+        <Show when={voice.screenshare()} fallback={<Symbol>stop_screen_share</Symbol>}>
+          <Symbol>screen_share</Symbol>
+        </Show>
       </IconButton>
       <Button
         size={props.size}

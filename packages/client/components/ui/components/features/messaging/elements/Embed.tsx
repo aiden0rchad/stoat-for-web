@@ -52,7 +52,8 @@ export function Embed(props: { embed: MessageEmbed }) {
         <SizedContent width={image()!.width} height={image()!.height}>
           <img
             // bypass proxy for known GIF providers
-            src={isGIF() ? image()!.url : image()!.proxiedURL}
+            src={isGIF() ? image()!.url : (image()!.proxiedURL || image()!.url)}
+            onError={(e) => { e.currentTarget.src = image()!.url; }}
             loading="lazy"
             class={css({ cursor: "pointer" })}
             onClick={() =>
@@ -73,7 +74,8 @@ export function Embed(props: { embed: MessageEmbed }) {
             controls={!isGIF()}
             preload="metadata"
             // bypass proxy for known GIF providers
-            src={isGIF() ? video()!.url : video()!.proxiedURL}
+            src={isGIF() ? video()!.url : (video()!.proxiedURL || video()!.url)}
+            onError={(e) => { e.currentTarget.src = video()!.url; }}
             class={css({ cursor: isGIF() ? "pointer" : "unset" })}
             onClick={() =>
               isGIF() &&
