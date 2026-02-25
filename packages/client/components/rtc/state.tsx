@@ -10,6 +10,7 @@ import {
 import { RoomContext } from "solid-livekit-components";
 
 import { Room } from "livekit-client";
+import { KrispNoiseFilter, type KrispNoiseFilterProcessor } from "@livekit/krisp-noise-filter";
 import { Channel } from "stoat.js";
 
 import { useState } from "@revolt/state";
@@ -50,6 +51,11 @@ class Voice {
   screenshare: Accessor<boolean>;
   #setScreenshare: Setter<boolean>;
 
+  noiseCancellation: Accessor<boolean>;
+  #setNoiseCancellation: Setter<boolean>;
+
+  #krispFilter: KrispNoiseFilterProcessor | undefined;
+
   constructor(voiceSettings: VoiceSettings) {
     this.#settings = voiceSettings;
 
@@ -80,6 +86,12 @@ class Voice {
     const [screenshare, setScreenshare] = createSignal(false);
     this.screenshare = screenshare;
     this.#setScreenshare = setScreenshare;
+
+    const [noiseCancellation, setNoiseCancellation] = createSignal(
+      voiceSettings.krispNoiseCancellation ?? true,
+    );
+    this.noiseCancellation = noiseCancellation;
+    this.#setNoiseCancellation = setNoiseCancellation;
   }
 
   async connect(channel: Channel, auth?: { url: string; token: string }) {
@@ -106,10 +118,22 @@ class Voice {
       this.#setVideo(false);
       this.#setScreenshare(false);
 
-      if (this.speakingPermission)
+      // Initialize Krisp noise filter if enabled
+      if (this.noiseCancellation()) {
+        this.#krispFilter = KrispNoiseFilter();
+        room.localParticipant
+          .setMicrophoneEnabled(true)
+          .then(async (pub) => {
+            if (pub?.track && this.#krispFilter) {
+              await pub.track.setProcessor(this.#krispFilter as any);
+            }
+            this.#setMicrophone(typeof pub !== "undefined");
+          });
+      } else if (this.speakingPermission) {
         room.localParticipant
           .setMicrophoneEnabled(true)
           .then((track) => this.#setMicrophone(typeof track !== "undefined"));
+      }
     });
 
     room.addListener("connected", () => this.#setState("CONNECTED"));
@@ -136,6 +160,7 @@ class Voice {
       this.#setState("READY");
       this.#setRoom(undefined);
       this.#setChannel(undefined);
+      this.#krispFilter = undefined;
     });
   }
 
@@ -171,6 +196,34 @@ class Voice {
     );
 
     this.#setScreenshare(room.localParticipant.isScreenShareEnabled);
+  }
+
+  async toggleNoiseCancellation() {
+    const newState = !this.noiseCancellation();
+    this.#setNoiseCancellation(newState);
+    this.#settings.krispNoiseCancellation = newState;
+
+    const room = this.room();
+    if (!room) return;
+
+    const micPub = room.localParticipant.getTrackPublication(
+      "microphone" as any,
+    );
+    const track = micPub?.track;
+
+    if (newState) {
+      // Enable: create filter and attach
+      this.#krispFilter = KrispNoiseFilter();
+      if (track) {
+        await track.setProcessor(this.#krispFilter as any);
+      }
+    } else {
+      // Disable: remove processor
+      if (track) {
+        await track.stopProcessor();
+      }
+      this.#krispFilter = undefined;
+    }
   }
 
   getConnectedUser(userId: string) {

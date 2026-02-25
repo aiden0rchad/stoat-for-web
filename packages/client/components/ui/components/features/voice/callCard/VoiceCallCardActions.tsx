@@ -61,6 +61,26 @@ export function VoiceCallCardActions(props: { size: "xs" | "sm" }) {
       </IconButton>
       <IconButton
         size={props.size}
+        variant={voice.noiseCancellation() ? "filled" : "tonal"}
+        onPress={() => voice.toggleNoiseCancellation()}
+        use:floating={{
+          tooltip: {
+            placement: "top",
+            content: voice.noiseCancellation()
+              ? t`Noise Cancellation On`
+              : t`Noise Cancellation Off`,
+          },
+        }}
+      >
+        <Show
+          when={voice.noiseCancellation()}
+          fallback={<Symbol>noise_control_off</Symbol>}
+        >
+          <Symbol>noise_aware</Symbol>
+        </Show>
+      </IconButton>
+      <IconButton
+        size={props.size}
         variant={voice.video() ? "filled" : "tonal"}
         onPress={() => voice.toggleCamera()}
       >

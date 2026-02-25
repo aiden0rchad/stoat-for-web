@@ -74,6 +74,7 @@
     "@lezer/highlight": "^1.2.3",
     "@lingui-solid/solid": "^5.1.4",
     "@livekit/components-core": "^0.12.13",
+    "@livekit/krisp-noise-filter": "^0.4.1",
     "@material-design-icons/svg": "^0.14.15",
     "@material-symbols/svg-400": "^0.40.2",
     "@material/material-color-utilities": "^0.4.0",
