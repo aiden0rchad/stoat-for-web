@@ -336,7 +336,11 @@ const Container = styled("div", {
 const CategoryTitle = styled("div", {
   base: {
     padding: "28px 14px 0",
-    color: "var(--md-sys-color-on-surface)",
+    color: "var(--md-sys-color-on-surface-variant)",
+    textTransform: "uppercase",
+    letterSpacing: "0.05em",
+    fontSize: "11px",
+    fontWeight: "700",
 
     ...typography.raw({ class: "label", size: "small" }),
   },

@@ -182,25 +182,45 @@ export function ChannelHeader(props: Props) {
       </Show>
 
       <Show when={props.sidebarState}>
-        <IconButton
-          use:floating={{
-            tooltip: {
-              placement: "bottom",
-              content: t`View pinned messages`,
-            },
+        <div
+          style={{
+            position: "relative",
+            display: "inline-flex",
           }}
-          onPress={() =>
-            props.sidebarState!().state === "pins"
-              ? props.setSidebarState!({
+        >
+          <IconButton
+            use:floating={{
+              tooltip: {
+                placement: "bottom",
+                content: t`View pinned messages`,
+              },
+            }}
+            onPress={() =>
+              props.sidebarState!().state === "pins"
+                ? props.setSidebarState!({
                   state: "default",
                 })
-              : props.setSidebarState!({
+                : props.setSidebarState!({
                   state: "pins",
                 })
-          }
-        >
-          <MdKeep />
-        </IconButton>
+            }
+          >
+            <MdKeep />
+          </IconButton>
+          <Show when={props.sidebarState!().state === "pins"}>
+            <div
+              style={{
+                position: "absolute",
+                top: "6px",
+                right: "6px",
+                width: "8px",
+                height: "8px",
+                "border-radius": "50%",
+                background: "var(--md-sys-color-primary)",
+              }}
+            />
+          </Show>
+        </div>
       </Show>
 
       <Show when={props.sidebarState && props.channel.type !== "SavedMessages"}>
@@ -248,12 +268,12 @@ export function ChannelHeader(props: Props) {
           onChange={(e) =>
             e.currentTarget.value
               ? props.setSidebarState!({
-                  state: "search",
-                  query: e.currentTarget.value,
-                })
+                state: "search",
+                query: e.currentTarget.value,
+              })
               : props.setSidebarState!({
-                  state: "default",
-                })
+                state: "default",
+              })
           }
         />
       </Show>
