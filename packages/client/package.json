@@ -131,7 +131,7 @@
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
     "remark-stringify": "^11.0.0",
-    "shiki": "^3.22.0",
+    "shiki": "^3.23.0",
     "solid-dnd-directive": "^0.2.0",
     "solid-floating-ui": "^0.3.1",
     "solid-forms": "^0.5.2",
