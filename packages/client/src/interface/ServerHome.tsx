@@ -9,7 +9,7 @@ import { Navigate, useParams } from "@revolt/routing";
 export const ServerHome: Component = () => {
   const params = useParams();
   const client = useClient();
-  const server = createMemo(() => client()!.servers.get(params.server)!);
+  const server = createMemo(() => client()!.servers.get(params.server!)!);
 
   return (
     // TODO: port the nice fallback

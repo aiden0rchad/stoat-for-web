@@ -21,8 +21,8 @@ export function LoadTheme() {
     const activeTheme = state.theme.activeTheme;
 
     // load fonts
-    FONTS[state.theme.interfaceFont].load();
-    MONOSPACE_FONTS[state.theme.monospaceFont].load();
+    (FONTS as Record<string, { load: () => void }>)[state.theme.interfaceFont]?.load();
+    (MONOSPACE_FONTS as Record<string, { load: () => void }>)[state.theme.monospaceFont]?.load();
 
     for (const [key, value] of Object.entries({
       // create unset variables to indicate where colours need replacing

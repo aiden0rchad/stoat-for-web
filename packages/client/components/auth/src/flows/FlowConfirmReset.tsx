@@ -25,7 +25,7 @@ export default function FlowConfirmReset() {
 
     await api.patch("/auth/account/reset_password", {
       password,
-      token,
+      token: token!,
       remove_sessions,
     });
 

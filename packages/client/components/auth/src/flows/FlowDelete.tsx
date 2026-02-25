@@ -16,7 +16,7 @@ export default function FlowDeleteAccount() {
   onMount(() => {
     api
       .put("/auth/account/delete", {
-        token: params.token,
+        token: params.token!,
       })
       .then(() => setDeleted(true))
       .catch(() => setDeleted("error"));

@@ -37,13 +37,13 @@ export type Props = {
    * Punch a hole through the avatar
    */
   holepunch?:
-    | "bottom-right"
-    | "top-right"
-    | "right"
-    | "overlap"
-    | "overlap-subtle"
-    | "none"
-    | false;
+  | "bottom-right"
+  | "top-right"
+  | "right"
+  | "overlap"
+  | "overlap-subtle"
+  | "none"
+  | false;
 
   /**
    * Specify overlay component
@@ -118,7 +118,6 @@ const FallbackBase = styled("div", {
 export function Avatar(props: Props) {
   return (
     <ParentBase
-      // @ts-expect-error not typed for some reason
       slot={props.slot}
       style={{
         width: props.size + "px",
