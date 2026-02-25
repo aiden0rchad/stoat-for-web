@@ -34,15 +34,15 @@ export type TypeTheme = {
    * (Material You)
    */
   m3Variant:
-    | "monochrome"
-    | "neutral"
-    | "tonal_spot"
-    | "vibrant"
-    | "expressive"
-    | "fidelity"
-    | "content"
-    | "rainbow"
-    | "fruit_salad";
+  | "monochrome"
+  | "neutral"
+  | "tonal_spot"
+  | "vibrant"
+  | "expressive"
+  | "fidelity"
+  | "content"
+  | "rainbow"
+  | "fruit_salad";
 
   /**
    * Whether to permit blurry surfaces
@@ -95,7 +95,7 @@ export class Theme extends AbstractStore {
     // handle prefers-color-scheme value and changes
     const [prefersDark, setPrefersDark] = createSignal(
       window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches,
+      window.matchMedia("(prefers-color-scheme: dark)").matches,
     );
 
     this.prefersDark = prefersDark;
@@ -120,11 +120,11 @@ export class Theme extends AbstractStore {
   default(): TypeTheme {
     return {
       preset: "you",
-      mode: "system",
+      mode: "dark",
 
-      m3Accent: "#5470ec",
+      m3Accent: "#5865F2",
       m3Contrast: 0.0,
-      m3Variant: "tonal_spot",
+      m3Variant: "neutral",
 
       interfaceFont: "Inter",
       monospaceFont: "Fira Code",

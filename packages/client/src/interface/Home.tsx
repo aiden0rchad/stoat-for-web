@@ -1,12 +1,10 @@
-import { Match, Show, Switch } from "solid-js";
+import { Show } from "solid-js";
 
 import { Trans } from "@lingui-solid/solid/macro";
-import { PublicChannelInvite } from "stoat.js";
 import { css, cva } from "styled-system/css";
 import { styled } from "styled-system/jsx";
 
 import { IS_DEV, useClient } from "@revolt/client";
-import { CONFIGURATION } from "@revolt/common";
 import { useModals } from "@revolt/modal";
 import { useNavigate } from "@revolt/routing";
 import {
@@ -19,14 +17,10 @@ import {
 } from "@revolt/ui";
 
 import MdAddCircle from "@material-design-icons/svg/filled/add_circle.svg?component-solid";
-import MdExplore from "@material-design-icons/svg/filled/explore.svg?component-solid";
 import MdGroups3 from "@material-design-icons/svg/filled/groups_3.svg?component-solid";
 import MdHome from "@material-design-icons/svg/filled/home.svg?component-solid";
-import MdPayments from "@material-design-icons/svg/filled/payments.svg?component-solid";
 import MdRateReview from "@material-design-icons/svg/filled/rate_review.svg?component-solid";
 import MdSettings from "@material-design-icons/svg/filled/settings.svg?component-solid";
-
-import Wordmark from "../../public/assets/web/wordmark.svg?component-solid";
 
 import { HeaderIcon } from "./common/CommonHeader";
 
@@ -95,11 +89,6 @@ export function HomePage() {
   const navigate = useNavigate();
   const client = useClient();
 
-  // check if we're stoat.chat; if so, check if the user is in the Lounge
-  const showLoungeButton = CONFIGURATION.IS_STOAT;
-  const isInLounge =
-    client()!.servers.get("01F7ZSBSFHQ8TA81725KQCSDDP") !== undefined;
-
   return (
     <Base>
       <Header placement="primary">
@@ -109,13 +98,32 @@ export function HomePage() {
         <Trans>Home</Trans>
       </Header>
       <div use:scrollable={{ class: content() }}>
-        <Column>
-          <Wordmark
+        <Column
+          class={css({
+            alignItems: "center",
+            textAlign: "center",
+            gap: "8px",
+          })}
+        >
+          <span
             class={css({
-              width: "160px",
-              fill: "var(--md-sys-color-on-surface)",
+              fontSize: "28px",
+              fontWeight: "700",
+              color: "var(--md-sys-color-on-surface)",
             })}
-          />
+          >
+            Welcome to Your Private Chat Space
+          </span>
+          <span
+            class={css({
+              fontSize: "14px",
+              color: "var(--md-sys-color-on-surface-variant)",
+              maxWidth: "400px",
+            })}
+          >
+            A self-hosted chat platform for you and your friends. Everything you
+            love about Discord — but on your own server.
+          </span>
         </Column>
         <Buttons>
           <SeparatedColumn>
@@ -128,81 +136,47 @@ export function HomePage() {
               }
               description={
                 <Trans>
-                  Invite all of your friends, some cool bots, and throw a big
-                  party.
+                  Create a server and invite your friends — just like Discord.
                 </Trans>
               }
               icon={<MdAddCircle />}
             >
-              <Trans>Create a group or server</Trans>
+              <Trans>Create a Server</Trans>
             </CategoryButton>
-            <Switch fallback={null}>
-              <Match when={showLoungeButton && isInLounge}>
-                <CategoryButton
-                  onClick={() => navigate("/server/01F7ZSBSFHQ8TA81725KQCSDDP")}
-                  description={
-                    <Trans>
-                      You can report issues and discuss improvements with us
-                      directly here.
-                    </Trans>
-                  }
-                  icon={<MdGroups3 />}
-                >
-                  <Trans>Go to the Stoat Lounge</Trans>
-                </CategoryButton>
-              </Match>
-              <Match when={showLoungeButton && !isInLounge}>
-                <CategoryButton
-                  onClick={() => {
-                    client()
-                      .api.get("/invites/Testers")
-                      .then((invite) =>
-                        PublicChannelInvite.from(client(), invite),
-                      )
-                      .then((invite) => openModal({ type: "invite", invite }));
-                  }}
-                  description={
-                    <Trans>
-                      You can report issues and discuss improvements with us
-                      directly here.
-                    </Trans>
-                  }
-                  icon={<MdGroups3 />}
-                >
-                  <Trans>Join the Stoat Lounge</Trans>
-                </CategoryButton>
-              </Match>
-            </Switch>
             <CategoryButton
-              variant="tertiary"
-              onClick={() =>
-                window.open(
-                  "https://wiki.revolt.chat/notes/project/financial-support/",
-                )
-              }
+              onClick={() => openModal({ type: "settings", config: "user" })}
               description={
-                <Trans>Support the project by donating - thank you!</Trans>
+                <Trans>
+                  Customize your profile, theme, and notification settings.
+                </Trans>
               }
-              icon={<MdPayments />}
+              icon={<MdSettings />}
             >
-              <Trans>Donate to Stoat</Trans>
+              <Trans>Open Settings</Trans>
             </CategoryButton>
           </SeparatedColumn>
           <SeparatedColumn>
-            <Show when={CONFIGURATION.IS_STOAT}>
-              <CategoryButton
-                onClick={() => navigate("/discover")}
-                description={
-                  <Trans>
-                    Find a community based on your hobbies or interests.
-                  </Trans>
-                }
-                icon={<MdExplore />}
-              >
-                <Trans>Discover Stoat</Trans>
-              </CategoryButton>
-            </Show>
             <CategoryButton
+              variant="tertiary"
+              onClick={() =>
+                openModal({
+                  type: "settings",
+                  config: "user",
+                  context: { page: "voice" },
+                })
+              }
+              description={
+                <Trans>
+                  Voice channels with video, screen sharing, and AI noise
+                  cancellation.
+                </Trans>
+              }
+              icon={<MdGroups3 />}
+            >
+              <Trans>Voice & Video</Trans>
+            </CategoryButton>
+            <CategoryButton
+              variant="tertiary"
               onClick={() =>
                 openModal({
                   type: "settings",
@@ -212,23 +186,12 @@ export function HomePage() {
               }
               description={
                 <Trans>
-                  Let us know how we can improve our app by giving us feedback.
+                  Your data stays on your own server. No tracking, no ads, ever.
                 </Trans>
               }
               icon={<MdRateReview {...iconSize(22)} />}
             >
-              <Trans>Give feedback on Stoat</Trans>
-            </CategoryButton>
-            <CategoryButton
-              onClick={() => openModal({ type: "settings", config: "user" })}
-              description={
-                <Trans>
-                  You can also click the gear icon in the bottom left.
-                </Trans>
-              }
-              icon={<MdSettings />}
-            >
-              <Trans>Open settings</Trans>
+              <Trans>Send Feedback</Trans>
             </CategoryButton>
           </SeparatedColumn>
         </Buttons>

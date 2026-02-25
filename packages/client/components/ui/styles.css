@@ -12,8 +12,24 @@
 
 body {
   margin: 0;
-  background: #191919;
+  background: #1e1f22;
   font-family: var(--fonts-primary);
+}
+
+/* Discord Dark Theme — Surface color overrides */
+:root {
+  --md-sys-color-surface-dim: #1e1f22;
+  --md-sys-color-surface: #313338;
+  --md-sys-color-surface-bright: #383a40;
+  --md-sys-color-surface-container-lowest: #111214;
+  --md-sys-color-surface-container-low: #2b2d31;
+  --md-sys-color-surface-container: #2b2d31;
+  --md-sys-color-surface-container-high: #383a40;
+  --md-sys-color-surface-container-highest: #404249;
+  --md-sys-color-on-surface: #f2f3f5;
+  --md-sys-color-on-surface-variant: #b5bac1;
+  --md-sys-color-outline: #4e5058;
+  --md-sys-color-outline-variant: #3f4147;
 }
 
 #root {
